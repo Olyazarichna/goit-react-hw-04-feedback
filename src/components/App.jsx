@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Statistics from 'components/Statistics/Statistics';
 import FeedbackOptions from 'components/FeedbackOptions/FeedbackOptions';
 import Section from 'components/Section/Section';
@@ -9,9 +9,9 @@ export default function App() {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
-  const [countTotalFeedback, setCountTotalFeedback] = useState(0);
-  const [countPositiveFeedbackPercentage, setCountPositiveFeedbackPercentage] =
-    useState(0);
+  // const [countTotalFeedback, setCountTotalFeedback] = useState(0);
+  // const [countPositiveFeedbackPercentage, setCountPositiveFeedbackPercentage] =
+  // useState(0);
 
   const onBtnClick = event => {
     switch (event.target.textContent.toLowerCase()) {
@@ -28,15 +28,17 @@ export default function App() {
         return;
     }
   };
-  useEffect(() => {
-    setCountTotalFeedback(good + neutral + bad);
-  }, [good, neutral, bad]);
 
-  useEffect(() => {
-    setCountPositiveFeedbackPercentage(
-      Math.round((good / countTotalFeedback) * 100)
-    );
-  }, [good, countTotalFeedback]);
+  const countTotalFeedback = () => {
+    let total = good + neutral + bad;
+    return total;
+  };
+
+  const countPositiveFeedbackPercentage = () => {
+    let total = good + neutral + bad;
+    let percentage = Math.round((good / total) * 100);
+    return percentage;
+  };
 
   return (
     <div>
@@ -47,15 +49,15 @@ export default function App() {
         />
       </Section>
       <Section title="Statistic">
-        {countTotalFeedback === 0 ? (
+        {countTotalFeedback() === 0 ? (
           <Notification message="There is no feedback" />
         ) : (
           <Statistics
             good={good}
             neutral={neutral}
             bad={bad}
-            total={countTotalFeedback}
-            positivePercentage={countPositiveFeedbackPercentage}
+            total={countTotalFeedback()}
+            positivePercentage={countPositiveFeedbackPercentage()}
           />
         )}
       </Section>
